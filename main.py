@@ -1,54 +1,48 @@
-# AI Research Assistant (Offline LLM Simulation)
-# This is a beginner-to-intermediate level project you can upload to GitHub
-# It simulates a scientific instrument recommendation system using simple logic + embeddings
-
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 
-# Load embedding model
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Sample database of instruments
 instruments = [
     {
         "name": "Scanning Electron Microscope (SEM)",
-        "description": "Used for high-resolution surface imaging of solid samples"
+        "description": "High-resolution surface imaging of solid samples",
+        "reason": "Best for surface morphology and nano-scale imaging"
     },
     {
         "name": "X-Ray Diffraction (XRD)",
-        "description": "Used for crystal structure analysis of materials"
+        "description": "Crystal structure analysis of materials",
+        "reason": "Ideal for phase identification and crystallography"
     },
     {
         "name": "Gas Chromatography (GC)",
-        "description": "Used for separating and analyzing volatile compounds"
+        "description": "Analysis of volatile chemical compounds",
+        "reason": "Used for separating and analyzing chemical mixtures"
     }
 ]
 
-# Encode descriptions
-instrument_embeddings = model.encode([inst['description'] for inst in instruments])
+embeddings = model.encode([inst['description'] for inst in instruments])
 
-# Function to recommend instrument
-def recommend_instrument(query):
+def recommend(query):
     query_embedding = model.encode([query])
-    similarities = cosine_similarity(query_embedding, instrument_embeddings)[0]
-    best_idx = np.argmax(similarities)
+    scores = cosine_similarity(query_embedding, embeddings)[0]
+    idx = np.argmax(scores)
+
+    result = instruments[idx]
 
     return {
-        "recommended_instrument": instruments[best_idx]['name'],
-        "confidence_score": float(similarities[best_idx])
+        "instrument": result["name"],
+        "confidence": float(scores[idx]),
+        "reasoning": result["reason"],
+        "alternative": instruments[(idx+1) % len(instruments)]["name"]
     }
 
-# Example usage
 if __name__ == "__main__":
-    user_query = input("Enter your research goal: ")
-    result = recommend_instrument(user_query)
+    query = input("Enter research objective: ")
+    res = recommend(query)
 
-    print("\nRecommended Instrument:", result['recommended_instrument'])
-    print("Confidence Score:", result['confidence_score'])
-
-# NEXT STEPS (mention this in README):
-# - Add more instruments
-# - Add reasoning explanation
-# - Convert into API using Flask/FastAPI
-# - Add offline LLM (like LLaMA via Ollama)
+    print("\nRecommended Instrument:", res["instrument"])
+    print("Reason:", res["reasoning"])
+    print("Alternative Option:", res["alternative"])
+    print("Confidence Score:", res["confidence"])
