@@ -1,23 +1,27 @@
 # AI Scientific Instrument Recommendation System
 
 ## Overview
-This project is a prototype AI system that recommends scientific instruments based on research objectives using semantic similarity.
+This project simulates an AI-driven scientific decision system that recommends laboratory instruments based on research objectives.
 
-## Features
-- Accepts research query
-- Uses embeddings
-- Recommends best instrument
-- Provides confidence score
+## Key Features
+- Semantic understanding of research queries
+- Instrument recommendation with confidence score
+- Reasoning explanation (why this instrument)
+- Alternative suggestions
 
-## Tech Stack
-- Python
-- Sentence Transformers
-- Scikit-learn
+## Architecture
+- Embedding Model: Sentence Transformers
+- Similarity Matching: Cosine Similarity
+- Design inspired by RAG-based systems
 
-## Future Improvements
-- Add reasoning explanation
-- Implement RAG
-- Add offline LLM
+## Future Scope
+- Integration with offline LLM (LLaMA / Ollama)
+- Dynamic SOP generation
+- Experimental parameter optimization
+- Full RAG pipeline
+
+## Why This Project
+This project is aligned with building AI-powered research intelligence systems instead of simple chatbots.
 
 ## Run
 pip install sentence-transformers scikit-learn
